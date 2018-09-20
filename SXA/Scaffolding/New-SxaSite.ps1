@@ -28,7 +28,7 @@ function Get-SetupRoot {
 $contentPath = "master:/content/F"
 $tenantName = "T"
 $siteName = "S"
-$gridSetupPath = "master:/sitecore/system/Settings/Feature/Experience Accelerator/Bootstrap/Grid Setup"
+$gridSetupItem = Get-Item -Path master: -ID "{85E7A149-9009-43D8-96AC-58605ADE7777}" # Bootstrap 3
 
 # create - new tenant
 New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" | Out-Null
@@ -51,5 +51,5 @@ $model.ValidThemes = $null
 $model.Language = "en"
 $model.HostName = "*"
 $model.VirtualFolder = "/"
-$model.GridSetup = Get-Item -Path $gridSetupPath
+$model.GridSetup = $gridSetupItem
 New-Site $model

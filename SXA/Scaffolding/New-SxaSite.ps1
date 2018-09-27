@@ -45,6 +45,8 @@ $model.SiteName = $siteName
 $model.SiteLocation = Get-Item -Path "$contentPath\$tenantName"
 $model.DefinitionItems = New-Object System.Collections.ArrayList($null)
 Get-SetupRoot "SiteSetupRoot" | ? { $_.IncludeByDefault -eq '1' } | % { $model.DefinitionItems.Add($_) } | Out-Null
+$model.DefinitionItems.Add($gridSetupItem) | Out-Null
+$model.DefinitionItems = Get-SortedSetupItemsCollection $model.DefinitionItems
 $model.CreateSiteTheme = $false
 $model.ThemeName = ""
 $model.ValidThemes = $null

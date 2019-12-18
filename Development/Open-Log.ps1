@@ -25,6 +25,9 @@ Location of the folder where your Sitecore logs live.
 .PARAMETER SingleWindow
 Allow you to focus on a single logview window. When used previously opened logview windows will be closed.
 
+.PARAMETER RemoveLogs
+Specifies whether stale log files should be removed.
+
 .EXAMPLE
 .\Open-Log.ps1 "c:\sitecore\Data\logs" -LogType Sitecore
 Removes all logs in "c:\sitecore\Data\logs\" and opens active Sitecore log
@@ -47,7 +50,9 @@ param(
     [ValidateSet("Sitecore", "Search", "SPE", "Publishing")]
     [string]$LogType = 'Sitecore',
     [Parameter(Mandatory = $false)]
-    [switch]$SingleWindow
+    [switch]$SingleWindow,
+    [Parameter(Mandatory = $false)]
+    [switch]$RemoveLogs
 )
 
 process {
@@ -71,7 +76,9 @@ process {
     $currentFolder = Get-Item $PSScriptRoot
     $exe = Join-Path $currentFolder.Parent.FullName "bin\logview.exe"
 
-    Get-ChildItem $LogsFolder | Remove-Item -ErrorAction SilentlyContinue | Out-Null
-    $firstLog = Get-ChildItem $LogsFolder | ? { $_.Name.StartsWith($ending) }
+    if ($RemoveLogs) {
+        Get-ChildItem $LogsFolder | Remove-Item -ErrorAction SilentlyContinue | Out-Null
+    }
+    $firstLog = Get-ChildItem $LogsFolder | ? { $_.Name.StartsWith($ending) } | Sort-Object -Property LastWriteTime -Descending | Select-Object -First 1
     & "$exe" $firstLog.FullName
 }

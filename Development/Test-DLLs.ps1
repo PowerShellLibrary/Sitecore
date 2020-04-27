@@ -46,7 +46,7 @@ process {
         }
 
         process {
-            Get-ChildItem $DllFolder -Filter "*.dll" | % {
+            Get-ChildItem -LiteralPath $DllFolder -Filter "*.dll" | % {
                 Write-Host $_.FullName -ForegroundColor Yellow
                 $versionInfo = (Get-Item $_.FullName).VersionInfo
                 Write-Host "FileVersion   `t`t[$($versionInfo.FileVersion)]"
@@ -72,6 +72,6 @@ process {
     $scriptBlock.ToString() | Out-File $tmp.FullName
     $scriptFilePath = [System.IO.Path]::ChangeExtension($tmp.FullName, ".ps1")
     $tmp | Rename-Item -NewName $tmp.Name.Replace(".tmp", ".ps1")
-    Invoke-Expression "powershell.exe $scriptFilePath $DllFolder"
+    Invoke-Expression "powershell.exe $scriptFilePath `"'$DllFolder'`""
     Remove-Item $scriptFilePath -Force
 }

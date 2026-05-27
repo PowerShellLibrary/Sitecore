@@ -1,0 +1,1 @@
+gi "C:\inetpub\wwwroot\App_Config\*\SXA\Foundation.Overrides\Sitecore.XA.Foundation.StandardValues.config.disabled" | Rename-Item -NewName 'Sitecore.XA.Foundation.StandardValues.config'
